@@ -171,7 +171,7 @@ module.exports = {
 &emsp;&emsp;但是 VuePress 的自动侧边栏还是推荐使用的，因为它可以在文章内部自动生成标题连接，使目录结构更加清晰地展现，同时，VuePress 的侧边栏还有导航功能，可以快速跳转到对应的小节，使用方法是不设置 sidebar 或者给 sidebar 设置默认值 ```'auto'``` （注意是表示为字符串值，需要把引号加上），至于局部设置和全局设置可以参照上面的导航栏。
 
 ## 个性化配置
-&emsp;&emsp;为了提高页面的美观程度，个性化设置是必不可少的，以下为默认主题下的个性化配置（注意：默认主题某些功能是使用插件实现的，因此，在使用时需要注意一下，属于插件功能后文会说）：
+&emsp;&emsp;为了是页面更加美观，个性化设置是必不可少的，以下为默认主题下的个性化配置：
 ### 最后更新时间
 &emsp;&emsp;VuePress 通过获取 ```git``` 最后一次提交的 UNIX 时间戳来实现文章的最后更新时间，然后，通过处理，将时间戳转换为合适的日期格式显示在文件底部。注意点有以下几点：
 * lastUpdated 属于插件，这表示如果自定义主题，则需要自己安装并整合。但默认主题对这个插件进行了整合，因此，只需要在 ```themeConfig.lastUpdated``` 中设置```对应的文字前缀```或者 ```true```。当设置为 true 时，文字默认显示为 ```Last Updated:[time]```，否则显示设置好的文字。
@@ -198,6 +198,132 @@ module.exports = {
 ```
 
 * 以上代码段为我个人的配置格式，更多配置参考[官方文档](https://www.vuepress.cn/plugin/official/plugin-last-updated.html)，同时，moment.js 处理的格式也有更多，可以参考[moment.js 官方文档](http://momentjs.cn/)。
+
+### 页面跳转平滑滚动
+&emsp;&emsp;这个功能是当你在 sidebar 点击某个标题进行跳转时，页面进行滚动跳转，而不是直接跳到对应的锚点。  
+&emsp;&emsp;原本我以为这是 VuePress 自带的功能，查看了默认主题的源码才知道是一个叫 ```smooth-scroll``` 的插件。但不管这么说，在默认主题下，直接在 ```config.js``` 中添加如下代码即可启用功能：
+
+```javascript
+module.exports = {
+  themeConfig : {
+    smoothScroll: true
+  }
+}
+```
+
+### 自定义样式和自定义页面类
+&emsp;&emsp;如果看过官方文档，那可能会被默认主题配置中的自定义页面类的教程坑一下。先看看[官方文档](https://www.vuepress.cn/theme/default-theme-config.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A1%B5%E9%9D%A2%E7%B1%BB)中描述的自定义页面类的步骤：
+* 在 markdown 文件中的 ```YAML front matter``` 块中声明一个 ```pageClass```：
+
+```yaml
+---
+pageClass: custom-page-class
+---
+```
+
+* 然后就可以写针对该页面的 CSS 样式了：
+
+```CSS
+/* .vuepress/override.styl */
+.theme-container.custom-page-class {
+  /* 特定页面的 CSS */
+}
+```
+
+&emsp;&emsp;结合上面的代码，那我们可以猜测，```theme-container``` 是 VuePress 页面默认的样式，而 pageClass 则是在同一页面元素下，多加一个名为 ```custom-page-class``` 的类，那么就可以合理解释官方实例的写法了。事实上，使用浏览器调试查看 HTML 代码可以发现，它就是这么做的。  
+&emsp;&emsp;如果你按照上述步骤操作却没有产生效果，那你可能踩了跟我一样的坑。在上述代码中，CSS 文件标注的文件名是 ```.vuepress/override.styl```。那它的意思是 .vuepres 文件夹下的 override.styl？其实不是，我猜它要表达的是在 ```.vuepres``` 文件夹下 ```某个重写默认样式的文件```。  
+&emsp;&emsp;那么如何重写默认样式的文件呢？  
+&emsp;&emsp;看看[官网](https://www.vuepress.cn/config/#styling)怎么说。在 .vuepress 文件夹中，添加 ```styles``` 文件夹，然后在这个文件夹中添加 ```index.styl``` 这是约定重写默认样式的入口文件。创建完 index.styl 以后，直接写对应的样式即可。  
+&emsp;&emsp;此时，如果要分离模块样式代码，只需要新建文件夹，然后将自定义的样式文件 ```@import``` 到 ```index.styl``` 即可。 
+
+:::tip 关于类名
+直接使用浏览器调试器查看元素的 class。。。 
+::: 
+
+&emsp;&emsp;综上所述：
+* 如果你只需要重写页面样式，直接在 ```.vuepres/styles/index.styl``` 中重写样式即可，但这会影响全局。
+* 如果需要只针对某个页面进行样式调整，则只需要在文档的 ```YAML front matter``` 中配置 ```pageClass``` 来给当前页面添加类型，这样就可以通过 CSS 选择器来针对某个页面来改变样式，至于 CSS 选择器，这里就不在赘述。
+
+### 自定义页面布局
+&emsp;&emsp;通过[官方文档](https://www.vuepress.cn/theme/default-theme-config.html#%E7%89%B9%E5%AE%9A%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80)，我们可以知道，VuePress 提供了特定页面布局，而这个特定页面布局实际上指的是 Vue 中的页面组件。  
+&emsp;&emsp;对于 Vue 的组件化管理，我是这么理解的：
+
+* 使用 vue 模板文件创建组件。
+* 当 vue 文件被直接访问时，它相当于一个页面。
+* 而当 vue 文件被引入时，vue 文件资源就可以被作为一个页面的某个模块使用。
+
+&emsp;&emsp;这里官方说的特定页面布局其实就是将文档按照 vue 文件设置的页面进行渲染。如果指向的 vue 文件为空，则当访问这个文档的页面地址时，整个页面都会为空。  
+&emsp;&emsp;使用方法：
+
+* 在 ```.vuepres``` 文件夹中添加 ```components``` 文件夹，这是页面访问的起始路径。
+* 在文档的 ```YAML front matter``` 中添加 `layout: [自定义组件名].vue` 来将文档按照 ```.vuepress/components/[自定义组件名].vue``` 进行渲染。
+
+&emsp;&emsp;自定义布局需要对文档数据进行渲染，可以配合[官方文档-获取渲染内容](https://www.vuepress.cn/theme/writing-a-theme.html#%E8%8E%B7%E5%8F%96%E6%B8%B2%E6%9F%93%E5%86%85%E5%AE%B9)和[官方文档-网站和页面的元数据](https://www.vuepress.cn/theme/writing-a-theme.html#%E7%BD%91%E7%AB%99%E5%92%8C%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE)使用。
+
+### 其他插件的使用
+&emsp;&emsp;可以看[官方文档](https://www.vuepress.cn/plugin/)，这里有默认主题下没有整合的插件。
+
+## 部署到 GitHub Pages
+### 配置 GitHub Pages
+* 登录 github 账户，在 github 账户上创建一个用于存放发布站点的仓库。
+* 在仓库的 setting 中找到 GitHub Pages 的配置项，将其中的 Source 下的下拉框选择保存打包代码的分支即可。
+
+### 部署步骤
+* 在 ```config.js``` 中设置 ```base``` 的值。
+
+:::tip 理解 ```base```
+&emsp;&emsp;```base``` 的值是部署站点的基础路径。举个例子，在 GitHub pages 中：
+* 如果站点部署在根路径下，即 ```https://xxx.github.io/```，则 ```base``` 的值应设置为 ```'/'```，或者不设置，因为 ```base``` 的默认值就是 ```'/'```。
+* 如果站点不再根目录下，即 ```https://xxx.github.io/blog/```，则  ```base``` 的值应设置为 ```'/blog/'```。
+:::
+
+* 使用 ```vuepress build docs``` 命令或者之前在 package.json 中配置过的 npm 命令 ```npm run build``` 进行项目打包构建。
+
+* 使用 git 将 ```docs/.vuepress/dist``` 中打包发布好的项目 push 到 github 上创建的设置好 GitHub Pages 的仓库中，完成 GitHub Pages 的部署。
+
+### 整合部署过程
+&emsp;&emsp;在[官方文档](https://www.vuepress.cn/guide/deploy.html#github-pages)中，我们可以看到，VuePress 建议我们建立一个后缀名为 ```.sh``` 的脚本，脚本内容```见文档```内容。此处我对文档内容进行了一些修改，以下是我的脚本内容：
+
+```bash
+#!/usr/bin/env sh
+
+# 确保脚本抛出遇到的错误
+set -e
+
+# 生成静态文件
+npm run build # 由于我修改了 package.json 的脚本，此处理应对应
+
+# 进入生成的文件夹
+cd docs/.vuepress/dist
+
+# 是将 dist 中的文件提交到本地 git 管理中
+git init
+git add -A
+git commit -m 'deploy'
+
+# 将生成的静态文件推送到 github 的 gh-pages 分支
+# gh-pages 分支作为 github pages 的展示页面
+git push -f https://github.com/L-SssA/Blog.git master:gh-pages
+
+# 回到 .sh 文件所在目录
+cd -
+
+# 将源码推送到 github 主分支
+git push -f https://github.com/L-SssA/Blog.git master
+
+```
+
+:::warning 注意
+&emsp;&emsp;在运行脚本前，需要先将源码 commit 一下，因为脚本知识做了推送，由于源码的改动 msg 应该每次提交都不同，因此无法写到脚本中，需要手动操作。
+:::
+
+&emsp;&emsp;从上述代码中可知，我在 github 上创建了一个名为 ```Blog``` 的仓库，然后在仓库中创建了两个分支，主分支用于保存源码，打包后将打包项目发布到 gh-pages 分支中，而 GitHub Pages 的配置中，我也选择了 gh-pages 分支。  
+&emsp;&emsp;这样，GitHub Pages 就部署完成了。
+
+## 结语
+&emsp;&emsp;这是我初学 VuePress 的学习笔记。说实话，写了很久，而且也并不能十分透彻。目前的话，只能够部署成默认主题的样式。不仅如此，有一些实用并且是必要的插件我没有配置，因为我相信这个网站还不是它最终的样子，因此像 ```Vssue评论```，```Google analytics谷歌统计```等插件是没有添加的。
+
+
 
 
 
