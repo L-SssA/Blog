@@ -314,7 +314,7 @@ git push -f https://github.com/L-SssA/Blog.git master
 ```
 
 :::warning 注意
-&emsp;&emsp;在运行脚本前，需要先将源码 commit 一下，因为脚本知识做了推送，由于源码的改动 msg 应该每次提交都不同，因此无法写到脚本中，需要手动操作。
+&emsp;&emsp;在运行脚本前，需要先将源码 commit 一下，因为脚本只是做了推送，由于源码的改动 msg 应该每次提交都不同，因此无法写到脚本中，需要手动操作。
 :::
 
 &emsp;&emsp;从上述代码中可知，我在 github 上创建了一个名为 ```Blog``` 的仓库，然后在仓库中创建了两个分支，主分支用于保存源码，打包后将打包项目发布到 gh-pages 分支中，而 GitHub Pages 的配置中，我也选择了 gh-pages 分支。  
