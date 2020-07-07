@@ -12,7 +12,7 @@ module.exports = {
                 text: '列表',
                 items: [{
                         text: 'VuePress',
-                        link: '/VuePress/'
+                        link: '/Vuepress/'
                     },
                     {
                         text: 'CSS',
