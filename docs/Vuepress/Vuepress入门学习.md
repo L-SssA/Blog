@@ -1,9 +1,9 @@
 ---
-title: VuePress 快速搭建和部署
+title: Vuepress入门学习
 # navbar: false
 ---
 
-# VuePress 快速搭建和部署
+# Vuepress入门学习
 
 > ### 参考资料：  
 > > [官方文档](https://www.vuepress.cn/guide/)  
@@ -321,7 +321,7 @@ git push -f https://github.com/L-SssA/Blog.git master
 &emsp;&emsp;这样，GitHub Pages 就部署完成了。
 
 ## 结语
-&emsp;&emsp;这是我初学 VuePress 的学习笔记。说实话，写了很久，而且也并不能十分透彻。目前的话，只能够部署成默认主题的样式。不仅如此，有一些实用并且是必要的插件我没有配置，因为我相信这个网站还不是它最终的样子，因此像 ```Vssue评论```，```Google analytics谷歌统计```等插件是没有添加的。
+&emsp;&emsp;这是我初学 VuePress 的学习笔记。说实话，写了很久，而且也并不能十分透彻。目前的话，只能够部署成默认主题的样式。不仅如此，有一些实用并且是必要的插件我没有配置，因为我相信这个网站还不是它最终的样子，因此像 ```Google analytics 谷歌统计``` 等插件是没有添加的。
 
 
 
