@@ -14,4 +14,4 @@ title: Vuepress板块
 * 个人水平有限，这是最重要的原因```_(xз」∠)_```。
 
 ## 内容
-[Vuepress入门学习笔记](/VuePress/Vuepress入门学习笔记)
+[Vuepress入门学习笔记](./Vuepress入门学习笔记)
