@@ -262,3 +262,6 @@ module.exports = {
 
 &emsp;&emsp;上述代码中，首先在 defaultTheme 中获取了默认的 colors，使用解构的方式将默认的 red 颜色表解构到需要覆盖的 red 中，再在下方新增 ```800``` 这个色阶。这样，在使用颜色时，就可以使用形如 ```<style>-red-800``` 的样式了。  
 &emsp;&emsp;此处使用颜色进行举例了个性化主题，还有很多不同的个性化适配可以参考[官方文档](https://www.tailwindcss.cn/docs/configuration)中，定制一栏的介绍。
+
+## 总结
+&emsp;&emsp;TailwindCSS 总体用下来还是不错的，主打个性化设计，不提供组件库，但对于想快速开发的人来说明显一点都不友好，在合适的场景使用合适的工具十分重要。
